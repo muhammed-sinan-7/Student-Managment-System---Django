@@ -11,58 +11,71 @@
     <!-- Right side -->
     <div class="d-flex align-items-center ms-auto gap-3">
 
-      <!-- User name -->
-      <div class="d-none d-md-flex flex-column text-end">
-        <span class="text-white-50 small">Welcome back,</span>
-        <span class="fw-semibold fs-6">
-          {{ request.user.first_name|default:request.user.username }}
-        </span>
-      </div>
+      {% if request.user.is_authenticated and not request.user.is_staff and not request.user.is_superuser %}
+        <!-- User name -->
+        <div class="d-none d-md-flex flex-column text-end">
+          <span class="text-white-50 small">Welcome back,</span>
+          <span class="fw-semibold fs-6">
+            {{ request.user.first_name|default:request.user.username }}
+          </span>
+        </div>
 
-      <!-- Notifications -->
-      <button
-        class="btn btn-outline-light position-relative rounded-circle d-flex align-items-center justify-content-center"
-        style="width: 42px; height: 42px;">
-        <i class="bi bi-bell fs-5"></i>
-        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-          3
-        </span>
-      </button>
-
-      <!-- User dropdown -->
-      <div class="dropdown">
+        <!-- Notifications -->
         <button
-          class="btn btn-light d-flex align-items-center gap-2 px-3 py-2 rounded-pill dropdown-toggle"
-          type="button" id="studentMenu" data-bs-toggle="dropdown" aria-expanded="false">
-          <div
-            class="rounded-circle d-flex align-items-center justify-content-center"
-            style="width: 40px; height: 40px; background-color: #ecfdf5;">
-            <span class="fw-semibold" style="color: #0f766e;">
-              {{ request.user.first_name|default:request.user.username|first|upper }}
-            </span>
-          </div>
-          <span class="fw-medium d-none d-md-inline fs-6">My Account</span>
+          class="btn btn-outline-light position-relative rounded-circle d-flex align-items-center justify-content-center"
+          style="width: 42px; height: 42px;">
+          <i class="bi bi-bell fs-5"></i>
+          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            3
+          </span>
         </button>
 
-        <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="studentMenu">
-          <li>
-            <a class="dropdown-item" href="#">
-              <i class="bi bi-person-circle me-2"></i> Profile
-            </a>
-          </li>
-          <li>
-            <a class="dropdown-item" href="#">
-              <i class="bi bi-gear me-2"></i> Settings
-            </a>
-          </li>
-          <li><hr class="dropdown-divider"></li>
-          <li>
-            <a class="dropdown-item text-danger" href="#">
-              <i class="bi bi-box-arrow-right me-2"></i> Logout
-            </a>
-          </li>
-        </ul>
-      </div>
+        <!-- User dropdown -->
+        <div class="dropdown">
+          <button
+            class="btn btn-light d-flex align-items-center gap-2 px-3 py-2 rounded-pill dropdown-toggle"
+            type="button" id="studentMenu" data-bs-toggle="dropdown" aria-expanded="false">
+            <div
+              class="rounded-circle d-flex align-items-center justify-content-center"
+              style="width: 40px; height: 40px; background-color: #ecfdf5;">
+              <span class="fw-semibold" style="color: #0f766e;">
+                {{ request.user.first_name|default:request.user.username|first|upper }}
+              </span>
+            </div>
+            <span class="fw-medium d-none d-md-inline fs-6">My Account</span>
+          </button>
+
+          <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="studentMenu">
+            <li>
+              <a class="dropdown-item" href="{% url 'students:profile' %}">
+                <i class="bi bi-person-circle me-2"></i> Profile
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="#">
+                <i class="bi bi-gear me-2"></i> Settings
+              </a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+              <a class="dropdown-item text-danger" href="#">
+                <i class="bi bi-box-arrow-right me-2"></i> Logout
+              </a>
+            </li>
+          </ul>
+        </div>
+
+      {% else %}
+        <!-- Login/Register buttons (shown to guests, staff, and superusers) -->
+         <a  {% comment %}href="{% url 'accounts:login' %}"  {% endcomment %}
+           class="btn btn-light fw-semibold px-4 py-2 rounded-pill">
+          Login
+        </a>
+         <a  {% comment %}href="{% url 'accounts:register' %}"  {% endcomment %}
+           class="btn btn-outline-light fw-semibold px-4 py-2 rounded-pill">
+          Register
+        </a>
+      {% endif %}
 
     </div>
   </div>

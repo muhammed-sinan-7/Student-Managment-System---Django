@@ -18,3 +18,6 @@ def attendance(request):
 
 def fees(request):
     return render(request,'fees.html')
+
+def logout(request):
+    pass
