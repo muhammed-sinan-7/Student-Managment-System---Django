@@ -16,8 +16,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
-
+from apps.accounts.views import home_redirect
+from django.conf import settings
+from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',include("apps.students.urls")),
+    path('',home_redirect, name='home'),
+    path('students/', include('apps.students.urls', namespace='students')),
+    path('accounts/',include('apps.accounts.urls', namespace='accounts')),
+    path('teachers/',include('apps.teachers.urls', namespace='teachers')),
+    # path('attendances/',include('apps.attendences.urls', namespace='attendences')),
 ]
+
+if settings.DEBUG:
+    urlpatterns+= static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

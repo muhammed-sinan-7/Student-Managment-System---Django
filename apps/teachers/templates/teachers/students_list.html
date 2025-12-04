@@ -1,0 +1,233 @@
+{% extends "teachers/layout.html" %}
+
+{% block content %}
+<div class="students-container">
+  <div class="page-header">
+    <h2 class="page-title">Class Students ({{ students|length }})</h2>
+    <div class="class-badge">
+      {{ assigned_class.class_name }} ({{ assigned_class.class_id }})
+    </div>
+  </div>
+
+  <div class="students-grid">
+    {% if students %}
+      {% for student in students %}
+        <div class="student-card">
+          <div class="student-avatar">
+            {% if student.photo %}
+              <img src="{{ student.photo.url }}" alt="{{ student.name }}" class="student-photo">
+            {% else %}
+              <span>{{ student.name|first|upper|default:"S" }}</span>
+            {% endif %}
+          </div>
+          <div class="student-details">
+            <h3 class="student-name">{{ student.name }}</h3>
+            <p class="student-roll">Roll: {{ student.roll_number }}</p>
+            <p class="student-class">{{ student.class_name }} ({{ student.class_id }})</p>
+          </div>
+          <div class="student-actions">
+            <a href="{% url 'teachers:student_detail' student.roll_number %}" class="view-btn">View Details</a>
+            <a href="{% url 'teachers:student_edit' student.roll_number %}" class="edit-btn">Edit</a>
+          </div>
+        </div>
+      {% empty %}
+        <div class="empty-state">
+          <p>No students assigned to you yet.</p>
+        </div>
+      {% endfor %}
+    {% endif %}
+  </div>
+</div>
+
+<style>
+.students-container {
+  max-width: 100%;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #4f46e5, #3b82f6);
+  border-radius: 12px;
+  color: white;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.page-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.class-badge {
+  background: rgba(255,255,255,0.2);
+  padding: 0.5rem 1.25rem;
+  border-radius: 25px;
+  font-weight: 600;
+  font-size: 1rem;
+  backdrop-filter: blur(10px);
+}
+
+/* Full width horizontal cards - NO SCROLL */
+.students-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 1rem 0;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.student-card {
+  width: 100%;
+  max-width: 1400px;
+  height: 120px;
+  background: linear-gradient(145deg, #ffffff, #f8fafc);
+  border: 2px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 1.5rem 2rem;
+  box-shadow: 
+    0 8px 25px rgba(0,0,0,0.08),
+    inset 0 1px 0 rgba(255,255,255,0.8);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  position: relative;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+.student-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #e2e8f0, transparent);
+}
+
+.student-card:hover {
+  border-color: #4f46e5;
+  transform: translateY(-4px);
+  box-shadow: 
+    0 20px 40px rgba(79, 70, 229, 0.15),
+    0 8px 25px rgba(0,0,0,0.12);
+}
+
+.student-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #6366f1, #3b82f6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 1.8rem;
+  flex-shrink: 0;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.student-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+.student-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.student-name {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1e293b;
+  line-height: 1.3;
+}
+
+.student-roll {
+  margin: 0;
+  font-size: 1rem;
+  color: #475569;
+  font-weight: 600;
+}
+
+.student-class {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* Action Buttons */
+.student-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.view-btn, .edit-btn {
+  padding: 0.65rem 1.75rem;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.view-btn {
+  background: linear-gradient(135deg, #4f46e5, #3b82f6);
+  color: white;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+}
+
+.view-btn:hover {
+  background: linear-gradient(135deg, #4338ca, #2563eb);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(79, 70, 229, 0.4);
+}
+
+.edit-btn {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  border: 2px solid transparent;
+}
+
+.edit-btn:hover {
+  background: linear-gradient(135deg, #059669, #047857);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+}
+
+.empty-state {
+  width: 100%;
+  text-align: center;
+  padding: 3rem;
+  color: #94a3b8;
+  font-size: 1.1rem;
+}
+</style>
+{% endblock %}

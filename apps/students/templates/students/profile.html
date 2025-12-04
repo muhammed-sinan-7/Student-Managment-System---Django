@@ -1,0 +1,315 @@
+{% extends "students/layout.html" %}
+
+{% block content %}
+<div class="container-fluid py-4">
+  
+  <!-- Top Banner Section -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card border-0 shadow-sm overflow-hidden">
+        <div class="position-relative" style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); height: 200px;">
+          <div class="position-absolute bottom-0 start-0 p-4 d-flex align-items-end w-100">
+            <div class="position-relative" style="margin-bottom: -50px;">
+              <div class="rounded-circle overflow-hidden border border-5 border-white shadow" 
+                   style="width: 120px; height: 120px; background: white;">
+                {% if student.photo %}
+                <img src="{{ student.photo.url }}" alt="{{ student.name }}" 
+                     style="width: 100%; height: 100%; object-fit: cover;">
+                {% else %}
+                <div class="d-flex align-items-center justify-content-center bg-secondary h-100">
+                  <span class="text-white fs-1">{{ student.name|slice:":1" }}</span>
+                </div>
+                {% endif %}
+              </div>
+            </div>
+            <div class="ms-4 pb-3 text-white">
+              <h3 class="mb-1 fw-bold">{{ student.name }}</h3>
+              <p class="mb-0 opacity-75">Roll No: {{ student.roll_number }}</p>
+            </div>
+            <div class="ms-auto pb-3">
+              <button class="btn btn-light btn-sm me-2">
+                <i class="bi bi-pencil me-1"></i> Edit Profile
+              </button>
+              <button class="btn btn-outline-light btn-sm">
+                <i class="bi bi-download me-1"></i> Download Report
+              </button>
+            </div>
+          </div>
+        </div>
+        <div style="height: 60px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- Left Column -->
+    <div class="col-12 col-lg-4">
+      
+      <!-- Personal Information -->
+      <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body p-4">
+          <h5 class="mb-4">
+            <i class="bi bi-person-circle text-primary me-2"></i>
+            Personal Information
+          </h5>
+          
+          <div class="mb-3">
+            <div class="d-flex align-items-center mb-2">
+              <i class="bi bi-person-badge text-muted me-2"></i>
+              <small class="text-muted">Full Name</small>
+            </div>
+            <p class="mb-0 fw-semibold">{{ student.name }}</p>
+          </div>
+
+          <hr>
+
+          <div class="mb-3">
+            <div class="d-flex align-items-center mb-2">
+              <i class="bi bi-calendar3 text-muted me-2"></i>
+              <small class="text-muted">Date of Birth</small>
+            </div>
+            <p class="mb-0 fw-semibold">{{ student.dob|date:"d M Y"|default:"Not provided" }}</p>
+          </div>
+
+          <hr>
+
+          <div class="mb-3">
+            <div class="d-flex align-items-center mb-2">
+              <i class="bi bi-gender-ambiguous text-muted me-2"></i>
+              <small class="text-muted">Gender</small>
+            </div>
+            <p class="mb-0 fw-semibold">{{ student.get_gender_display|default:"Not provided" }}</p>
+          </div>
+
+          <hr>
+
+          <div class="mb-3">
+            <div class="d-flex align-items-center mb-2">
+              <i class="bi bi-envelope text-muted me-2"></i>
+              <small class="text-muted">Email Address</small>
+            </div>
+            <p class="mb-0 fw-semibold">{{ student.email|default:"Not provided" }}</p>
+          </div>
+
+          <hr>
+
+          <div class="mb-3">
+            <div class="d-flex align-items-center mb-2">
+              <i class="bi bi-telephone text-muted me-2"></i>
+              <small class="text-muted">Phone Number</small>
+            </div>
+            <p class="mb-0 fw-semibold">{{ student.phone|default:"Not provided" }}</p>
+          </div>
+
+          <hr>
+
+          <div class="mb-0">
+            <div class="d-flex align-items-center mb-2">
+              <i class="bi bi-geo-alt text-muted me-2"></i>
+              <small class="text-muted">Address</small>
+            </div>
+            <p class="mb-0 fw-semibold">Not provided</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Parent Information -->
+      <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+          <h5 class="mb-4">
+            <i class="bi bi-people-fill text-success me-2"></i>
+            Parent Information
+          </h5>
+          
+          <div class="mb-3">
+            <div class="d-flex align-items-center mb-2">
+              <i class="bi bi-person text-muted me-2"></i>
+              <small class="text-muted">Father's Name</small>
+            </div>
+            <p class="mb-0 fw-semibold">{{ student.father|default:"Not provided" }}</p>
+          </div>
+
+          <hr>
+
+          <div class="mb-3">
+            <div class="d-flex align-items-center mb-2">
+              <i class="bi bi-person text-muted me-2"></i>
+              <small class="text-muted">Mother's Name</small>
+            </div>
+            <p class="mb-0 fw-semibold">{{ student.mother_name|default:"Not provided" }}</p>
+          </div>
+
+          <hr>
+
+          <div class="mb-3">
+            <div class="d-flex align-items-center mb-2">
+              <i class="bi bi-telephone text-muted me-2"></i>
+              <small class="text-muted">Parent Contact</small>
+            </div>
+            <p class="mb-0 fw-semibold">{{ student.parent_phone|default:"Not provided" }}</p>
+          </div>
+        
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column -->
+    <div class="col-12 col-lg-8">
+      
+      <!-- Academic Information -->
+      <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body p-4">
+          <h5 class="mb-4">
+            <i class="bi bi-mortarboard-fill text-primary me-2"></i>
+            Academic Information
+          </h5>
+          
+          <div class="row g-3">
+            <div class="col-6 col-md-4">
+              <div class="p-3 bg-light rounded">
+                <small class="text-muted d-block mb-1">Roll Number</small>
+                <h6 class="mb-0">{{ student.roll_number }}</h6>
+              </div>
+            </div>
+
+            <div class="col-6 col-md-4">
+              <div class="p-3 bg-light rounded">
+                <small class="text-muted d-block mb-1">Class</small>
+                <h6 class="mb-0">{{ student.class_name|default:"Not assigned" }}</h6>
+              </div>
+            </div>
+
+            <div class="col-6 col-md-4">
+              <div class="p-3 bg-light rounded">
+                <small class="text-muted d-block mb-1">Section</small>
+                <h6 class="mb-0">{{ student.class_id|default:"Not assigned" }}</h6>
+              </div>
+            </div>
+
+            <div class="col-6 col-md-4">
+              <div class="p-3 bg-light rounded">
+                <small class="text-muted d-block mb-1">Academic Year</small>
+                <h6 class="mb-0">2025-2026</h6>
+              </div>
+            </div>
+
+            <div class="col-6 col-md-4">
+              <div class="p-3 bg-light rounded">
+                <small class="text-muted d-block mb-1">Class Teacher</small>
+                <h6 class="mb-0">{{ student.teacher|default:"Not assigned" }}</h6>
+              </div>
+            </div>
+
+            <div class="col-6 col-md-4">
+              <div class="p-3 bg-light rounded">
+                <small class="text-muted d-block mb-1">Status</small>
+                <span class="badge bg-success">Active</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Student Statistics -->
+      <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+          <h5 class="mb-4">
+            <i class="bi bi-bar-chart-fill text-info me-2"></i>
+            Student Statistics
+          </h5>
+          
+          <!-- Attendance -->
+          <div class="mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <div>
+                <h6 class="mb-0">Attendance Percentage</h6>
+                <small class="text-muted">Present days / Total days</small>
+              </div>
+              <h5 class="mb-0 text-primary">{{ attendance_percentage }}%</h5>
+            </div>
+            <div class="progress" style="height: 12px;">
+              <div class="progress-bar bg-primary" style="width: {{ attendance_percentage }}%"></div>
+            </div>
+          </div>
+
+          <!-- Discipline Score -->
+          <div class="mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <div>
+                <h6 class="mb-0">Discipline Score</h6>
+                <small class="text-muted">Behavior and conduct rating</small>
+              </div>
+              <h5 class="mb-0 text-success">{{ discipline_score }}/10</h5>
+            </div>
+            <div class="progress" style="height: 12px;">
+              <div class="progress-bar bg-success" style="width: {{ discipline_percentage }}%"></div>
+            </div>
+          </div>
+
+          <!-- Assignment Completion -->
+          <div class="mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <div>
+                <h6 class="mb-0">Assignment Completion</h6>
+                <small class="text-muted">Completed / Total assignments</small>
+              </div>
+              <h5 class="mb-0 text-warning">{{ assignment_completion }}%</h5>
+            </div>
+            <div class="progress" style="height: 12px;">
+              <div class="progress-bar bg-warning" style="width: {{ assignment_completion }}%"></div>
+            </div>
+          </div>
+
+          <!-- Exam Performance -->
+          <div class="mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <div>
+                <h6 class="mb-0">Exam Performance</h6>
+                <small class="text-muted">Average exam score</small>
+              </div>
+              <h5 class="mb-0 text-danger">{{ exam_average }}%</h5>
+            </div>
+            <div class="progress" style="height: 12px;">
+              <div class="progress-bar bg-danger" style="width: {{ exam_average }}%"></div>
+            </div>
+          </div>
+
+          <!-- Participation Score -->
+          <div class="mb-0">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <div>
+                <h6 class="mb-0">Class Participation</h6>
+                <small class="text-muted">Engagement and participation</small>
+              </div>
+              <h5 class="mb-0 text-info">{{ participation_percentage }}%</h5>
+            </div>
+            <div class="progress" style="height: 12px;">
+              <div class="progress-bar bg-info" style="width: {{ participation_percentage }}%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<style>
+  .card {
+    transition: all 0.3s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.15) !important;
+  }
+
+  .progress {
+    border-radius: 10px;
+  }
+
+  .progress-bar {
+    border-radius: 10px;
+  }
+</style>
+{% endblock content %}

@@ -41,10 +41,10 @@ INSTALLED_APPS = [
     'apps.accounts',      # Not just 'accounts'
     'apps.attendences',
     'apps.classes',
-    'apps.dashboard',
     'apps.fees',
     'apps.students',
     'apps.teachers',
+    'widget_tweaks',
 ]
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
@@ -131,6 +131,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 # STATICFILES_DIRS = [BASE_DIR / "static"]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

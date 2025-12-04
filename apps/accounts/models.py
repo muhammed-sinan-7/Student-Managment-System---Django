@@ -8,9 +8,12 @@ class CustomUser(AbstractUser):
     phone = models.CharField(max_length=15, blank=True)
     user_type = models.CharField(
         max_length=20,
-        choices=[("student", "Student"),("admin", "Admin"),("teacher", "Teacher")],
+        choices=[("student", "Student"),("teacher", "Teacher"),('admin','Admin')],
         default="student",
     )
 
+    USERNAME_FIELD = 'email'  # Use email for login
+    REQUIRED_FIELDS = ['username']  # Required when creating superuser etc.
+
     def __str__(self):
-        return self.username
+        return self.email  # Show email instead of username
