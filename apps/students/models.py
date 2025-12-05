@@ -1,7 +1,7 @@
 from django.db import models
 from apps.accounts.models import CustomUser
 from django.conf import settings
-from apps.teachers.models import Teacher
+from apps.teachers.models import Teacher,Courses
 from apps.classes.models import Classes
 class Student(models.Model):
     
@@ -31,6 +31,7 @@ class Student(models.Model):
     father = models.CharField(max_length=30, null=True, blank=True)
     mother_name = models.CharField(max_length=30, null=True, blank=True)
     parent_phone = models.CharField(max_length=15, null=True, blank=True)
+    courses = models.ManyToManyField(Courses, related_name='students',null=True,blank=True)
     
     def save(self, *args, **kwargs):
        
@@ -55,3 +56,5 @@ class Events(models.Model):
     
     def __str__(self):
         return self.name
+    
+    

@@ -2,9 +2,12 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .models import CustomUser
 from apps.students.models import Student,Events
-from apps.teachers.models import Teacher
+from apps.teachers.models import Teacher,Courses
 from apps.classes.models import Classes
-from apps.attendences.models import Attendences
+from apps.teachers.models import Notification
+
+
+
 class CustomUserAdmin(UserAdmin):
     model = CustomUser
     list_display = ['username', 'email', 'user_type', 'is_staff']
@@ -21,4 +24,5 @@ admin.site.register(Student)
 admin.site.register(Events)
 admin.site.register(Teacher)
 admin.site.register(Classes)
-admin.site.register(Attendences)
+admin.site.register(Courses)
+admin.site.register(Notification)

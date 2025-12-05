@@ -25,7 +25,7 @@ urlpatterns = [
     path('students/', include('apps.students.urls', namespace='students')),
     path('accounts/',include('apps.accounts.urls', namespace='accounts')),
     path('teachers/',include('apps.teachers.urls', namespace='teachers')),
-    # path('attendances/',include('apps.attendences.urls', namespace='attendences')),
+    
 ]
 
 if settings.DEBUG:

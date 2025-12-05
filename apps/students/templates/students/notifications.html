@@ -1,0 +1,58 @@
+<!-- students/templates/students/notifications.html -->
+{% extends 'students/layout.html' %}
+
+{% block title %}Notifications{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-8 col-xl-6">
+      
+      <div class="d-flex align-items-center justify-content-between mb-4">
+        <h2 class="mb-0">
+          <i class="bi bi-bell-fill me-2 text-primary"></i>
+          Notifications
+        </h2>
+        <span class="badge bg-success fs-6">All caught up!</span>
+      </div>
+
+      {% if notifications %}
+        <div class="card shadow-sm border-0">
+          <div class="card-body p-0">
+            {% for notification in notifications %}
+              <div class="p-4 border-bottom {% if not notification.is_read %}bg-light{% endif %}">
+                <div class="d-flex gap-3 align-items-start">
+                  <div class="flex-shrink-0 mt-1">
+                    <div class="bg-primary bg-opacity-10 rounded-3 p-2">
+                      <i class="bi bi-book text-primary fs-4"></i>
+                    </div>
+                  </div>
+                  <div class="flex-grow-1">
+                    <h6 class="mb-2 fw-semibold">{{ notification.title }}</h6>
+                    <p class="mb-2 text-muted small">{{ notification.message }}</p>
+                    <small class="text-black-50">
+                      <i class="bi bi-clock me-1"></i>
+                      <!-- TRY THESE ONE BY ONE - replace the time part -->
+                      {{ notification.created_at|date:"M d, Y H:i" }}
+                      <!-- OR -->
+                      <!-- {{ notification.created_at|date:"M d, Y" }} {{ notification.created_at|time:"g:i A" }} -->
+                      <!-- OR SIMPLIEST -->
+                      <!-- {{ notification.created_at }} -->
+                    </small>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      {% else %}
+        <div class="text-center py-5">
+          <i class="bi bi-bell-slash display-1 text-muted"></i>
+          <h4 class="mt-4 text-muted mb-3">No notifications yet</h4>
+          <p class="text-muted">You'll see notifications here when your teacher assigns courses.</p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

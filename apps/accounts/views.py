@@ -94,6 +94,13 @@ def RegView(request):
 
 
 def LoginView(request):
+    if request.user.is_authenticated:
+        if hasattr(request.user, 'student'):
+            return redirect("students:dashboard")
+        elif hasattr(request.user, 'teacher'):
+            return redirect("teachers:profile")
+        return redirect("home")  # Fallback
+    
     if request.method == "POST":
         form = LoginForm(request.POST)
         if form.is_valid():

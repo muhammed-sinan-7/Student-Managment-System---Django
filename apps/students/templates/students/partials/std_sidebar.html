@@ -1,50 +1,94 @@
-<nav class="bg-white border-end vh-100 p-4">
-  <ul class="nav nav-pills flex-column gap-3">
+<style>
+  /* Modern Sidebar */
+  nav.modern-sidebar {
+    background: linear-gradient(145deg, #1e293b 0%, #334155 100%);
+    border-right: none;
+    height: 100vh;
+    padding: 2rem 1rem;
+    box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+  }
 
-    <!-- Dashboard -->
-    <li class="nav-item">
-      <a class="nav-link d-flex align-items-center gap-3 py-3 px-3 fs-5 fw-semibold"
+  nav.modern-sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  nav.modern-sidebar a.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 1rem 1.5rem;
+    font-weight: 400;
+    font-size: 1.1rem;
+    color: #cbd5e1;
+    border-radius: 16px;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Default icon color */
+  nav.modern-sidebar a.nav-link i {
+    font-size: 1.4rem;
+    color: #94a3b8;
+    transition: all 0.3s ease;
+  }
+
+  /* Active & Hover - Full colored nav item */
+  nav.modern-sidebar a.nav-link.active,
+  nav.modern-sidebar a.nav-link:hover {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    color: white;
+    transform: translateX(8px);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+  }
+
+  nav.modern-sidebar a.nav-link.active i,
+  nav.modern-sidebar a.nav-link:hover i {
+    color: white;
+    filter: drop-shadow(0 0 8px rgba(255,255,255,0.8));
+  }
+
+  /* Active indicator */
+  nav.modern-sidebar a.nav-link.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 5px;
+    background: #10b981;
+    border-radius: 0 16px 16px 0;
+  }
+</style>
+
+<nav class="modern-sidebar">
+  <ul>
+    <li>
+      <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" 
          href="{% url 'students:dashboard' %}">
-        <i class="ri-dashboard-2-line fs-3" style="color:#0f766e;"></i>
-        <span class="text-dark">Dashboard</span>
+        <i class="ri-dashboard-2-fill"></i>
+        <span>Dashboard</span>
       </a>
     </li>
-
-    <!-- Profile -->
-    <li class="nav-item">
-      <a class="nav-link d-flex align-items-center gap-3 py-3 px-3 fs-5 fw-semibold"
+    <li>
+      <a class="nav-link {% if request.resolver_match.url_name == 'profile' %}active{% endif %}" 
          href="{% url 'students:profile' %}">
-        <i class="ri-user-3-line fs-3" style="color:#0f766e;"></i>
-        <span class="text-dark">Profile</span>
+        <i class="ri-user-2-fill"></i>
+        <span>Profile</span>
       </a>
     </li>
-
-    <!-- Attendance -->
-    <li class="nav-item">
-      <a class="nav-link d-flex align-items-center gap-3 py-3 px-3 fs-5 fw-semibold" >
-         {% comment %} href="{% url 'attendences:student_calendar' %}"> {% endcomment %}
-        <i class="ri-calendar-check-line fs-3" style="color:#0f766e;"></i>
-        <span class="text-dark">Attendance</span>
-      </a>
-    </li>
-
-    <!-- Courses -->
-    <li class="nav-item">
-      <a class="nav-link d-flex align-items-center gap-3 py-3 px-3 fs-5 fw-semibold"
+    <li>
+      <a class="nav-link {% if request.resolver_match.url_name == 'courses' %}active{% endif %}" 
          href="{% url 'students:courses' %}">
-        <i class="ri-book-2-line fs-3" style="color:#0f766e;"></i>
-        <span class="text-dark">Courses</span>
+        <i class="ri-bookmark-fill"></i>
+        <span>Courses</span>
       </a>
     </li>
-
-    <!-- Fees -->
-    <li class="nav-item">
-      <a class="nav-link d-flex align-items-center gap-3 py-3 px-3 fs-5 fw-semibold"
-         href="{% url 'students:fees' %}">
-        <i class="ri-money-rupee-circle-line fs-3" style="color:#0f766e;"></i>
-        <span class="text-dark">Fees</span>
-      </a>
-    </li>
-
   </ul>
 </nav>
