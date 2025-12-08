@@ -12,8 +12,8 @@ class CustomUser(AbstractUser):
         default="student",
     )
 
-    USERNAME_FIELD = 'email'  # Use email for login
-    REQUIRED_FIELDS = ['username']  # Required when creating superuser etc.
+    USERNAME_FIELD = 'email'  
+    REQUIRED_FIELDS = ['username'] 
 
     def __str__(self):
-        return self.email  # Show email instead of username
+        return self.email 

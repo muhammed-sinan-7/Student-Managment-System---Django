@@ -1,0 +1,23 @@
+<nav class="bg-slate-800/95 backdrop-blur-md border-b border-slate-700/50 shadow-2xl px-6 py-4 lg:px-8">
+    <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-4">
+            <button class="lg:hidden p-2 rounded-xl bg-slate-700/50 hover:bg-slate-600/50 text-slate-200 transition-colors">
+                <i class="ri-menu-line text-xl"></i>
+            </button>
+            <h1 class="text-xl font-semibold text-slate-200 hidden md:block">
+                {% block page_title %}Dashboard{% endblock %}
+            </h1>
+        </div>
+        
+        <div class="flex items-center space-x-4">
+        <a href="{% url 'admin_panel:logout' %}">logout</a>
+            <div class="flex items-center space-x-3 p-2 rounded-xl hover:bg-slate-700/50 transition-colors">
+                <div class="w-9 h-9 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-full flex items-center justify-center shadow-lg">
+                    <i class="ri-user-line text-white text-sm"></i>
+                </div>
+                <span class="text-sm font-medium text-slate-200 hidden md:block">Admin</span>
+                <i class="ri-arrow-down-s-line text-slate-400 ml-1"></i>
+            </div>
+        </div>
+    </div>
+</nav>

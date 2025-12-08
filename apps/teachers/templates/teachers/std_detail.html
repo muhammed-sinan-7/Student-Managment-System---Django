@@ -40,7 +40,7 @@
       <!-- Personal Info Card -->
       <div class="info-card personal-card">
         <div class="card-header">
-          <div class="card-icon">👤</div>
+          <div class="card-icon"></div>
           <h3>Personal Information</h3>
         </div>
         <div class="info-grid">
@@ -54,7 +54,7 @@
       <!-- Academic Info Card -->
       <div class="info-card academic-card">
         <div class="card-header">
-          <div class="card-icon">📚</div>
+          <div class="card-icon"></div>
           <h3>Academic Details</h3>
         </div>
         <div class="info-grid">
@@ -68,7 +68,7 @@
       <!-- Family Info Card -->
       <div class="info-card family-card">
         <div class="card-header">
-          <div class="card-icon">👨‍👩‍👧‍👦</div>
+          <div class="card-icon"></div>
           <h3>Parents Details</h3>
         </div>
         <div class="info-grid">
@@ -81,15 +81,16 @@
       <!-- Course & Actions Card -->
       <div class="info-card actions-card">
         <div class="card-header">
-          <div class="card-icon">🎯</div>
+          <div class="card-icon"></div>
           <h3>Assigned Course</h3>
         </div>
         <div class="courses-section">
-          {% if student %}
+          {% if student.courses.all %}
+
             <ul class="course-list">
-             
-                <li class="course-item"><span class="course-name">{{ student.course }}</span></li>
-             
+              {% for course in student.courses.all  %}
+                <li class="course-item"><span class="course-name">{{ course.name }}</span></li>
+             {% endfor %}
             </ul>
           {% else %}
             <div class="no-courses">No courses assigned yet</div>

@@ -22,10 +22,7 @@ def profile(request):
 def dashboard(request):
     events = Events.objects.all()
     student = request.user.student 
-    attendence_percentage = 0
-    pending_fees = 0
-    upcoming_exam = None
-    class_name = None
+
     unread_notifications = request.user.notifications.filter(is_read=False).count()
     if student.class_id:
         class_obj = Classes.objects.filter(class_id=student.class_id).first()
@@ -33,10 +30,6 @@ def dashboard(request):
             class_name = class_obj.class_name
     context ={
         'student':student,
-        'attendence_percentage':attendence_percentage,
-        'pending_fees':pending_fees,
-        'upcoming_exam':upcoming_exam,
-        'class_name':class_name,
         'events':events,
         'unread_notifications':unread_notifications
     }
@@ -56,18 +49,18 @@ def courses(request):
 
 @login_required
 def notifications_view(request):
-    """Display all notifications for student and mark as read"""
+    
     student = request.user.student
     
-    # Get all notifications
+    
     notifications = request.user.notifications.all()
     
-    # Mark all as read when page opens
+    
     request.user.notifications.filter(is_read=False).update(is_read=True)
     
     context = {
         'student': student,
         'notifications': notifications,
-        'unread_notifications': 0  # ADD THIS LINE - count becomes 0
+        'unread_notifications': 0 
     }
     return render(request, 'students/notifications.html', context)

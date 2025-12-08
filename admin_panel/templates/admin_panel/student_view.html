@@ -1,0 +1,145 @@
+{% extends "admin_panel/layout.html" %}
+
+{% block title %}{{ student.name }} - Student View{% endblock %}
+{% block page_title %}{{ student.name }}{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto space-y-8">
+  <!-- Header with Photo & Quick Stats -->
+  <div class="bg-slate-800/80 backdrop-blur-md border border-slate-700/50 rounded-3xl p-8 shadow-xl">
+    <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
+      <!-- Photo & Basic Info -->
+      <div class="flex items-start space-x-6 flex-1">
+        {% if student.photo %}
+        <img src="{{ student.photo.url }}" alt="{{ student.name }}" 
+             class="w-28 h-28 lg:w-32 lg:h-32 rounded-3xl object-cover shadow-2xl border-4 border-emerald-500/30 flex-shrink-0">
+        {% else %}
+        <div class="w-28 h-28 lg:w-32 lg:h-32 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-3xl flex items-center justify-center shadow-2xl text-white text-2xl font-bold flex-shrink-0">
+          {{ student.name|first|upper }}
+        </div>
+        {% endif %}
+        
+        <div>
+          <h1 class="text-4xl lg:text-5xl font-bold text-slate-100 leading-tight">{{ student.name }}</h1>
+          <p class="text-2xl text-slate-300 mt-2 font-mono">{{ student.roll_number }}</p>
+          
+          <!-- Status & Quick Stats -->
+          <div class="flex items-center space-x-6 mt-6">
+            <span class="px-4 py-2 bg-emerald-500/20 text-emerald-400 rounded-2xl font-semibold text-lg border border-emerald-500/30">
+              <i class="ri-check-line mr-1"></i>Active
+            </span>
+            <div class="flex items-center space-x-6 text-sm text-slate-400">
+              <div>{{ student.courses.all|length }} Courses</div>
+              {% if student.teacher %}
+              <div>Teacher: {{ student.teacher.name }}</div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Actions -->
+      <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+        <a href="{% url 'admin_panel:student_edit' student.roll_number %}" 
+           class="px-8 py-3 bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all text-center">
+          <i class="ri-edit-2-line mr-2"></i>Edit Student
+        </a>
+        <a href="{% url 'admin_panel:students' %}" 
+           class="px-8 py-3 bg-slate-700/50 hover:bg-slate-600/50 text-slate-200 font-semibold rounded-2xl transition-all text-center">
+          <i class="ri-arrow-left-line mr-2"></i>Back to Students
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <!-- Personal Info -->
+    <div class="bg-slate-800/80 backdrop-blur-md border border-slate-700/50 rounded-3xl p-8 shadow-xl space-y-6">
+      <h2 class="text-2xl font-bold text-slate-100 flex items-center">
+        <i class="ri-user-line text-emerald-400 mr-3"></i>Personal Information
+      </h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+        <div>
+          <span class="text-slate-400 block mb-1">Class</span>
+          <span class="font-semibold text-slate-200">{{ student.class_name|default:"N/A" }} ({{ student.class_id|default:"N/A" }})</span>
+        </div>
+        <div>
+          <span class="text-slate-400 block mb-1">Gender</span>
+          <span class="font-semibold text-slate-200 capitalize">{{ student.gender|default:"N/A" }}</span>
+        </div>
+        <div>
+          <span class="text-slate-400 block mb-1">Date of Birth</span>
+          <span class="font-semibold text-slate-200">{{ student.dob|date:"M d, Y"|default:"N/A" }}</span>
+        </div>
+        <div>
+          <span class="text-slate-400 block mb-1">Email</span>
+          <span class="font-semibold text-slate-200">{{ student.email|default:"N/A" }}</span>
+        </div>
+        <div class="md:col-span-2">
+          <span class="text-slate-400 block mb-1">Phone</span>
+          <span class="font-semibold text-slate-200">{{ student.phone|default:"N/A" }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Parent Info -->
+    <div class="bg-slate-800/80 backdrop-blur-md border border-slate-700/50 rounded-3xl p-8 shadow-xl space-y-6">
+      <h2 class="text-2xl font-bold text-slate-100 flex items-center">
+        <i class="ri-group-line text-amber-400 mr-3"></i>Parent Information
+      </h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+        <div>
+          <span class="text-slate-400 block mb-1">Father</span>
+          <span class="font-semibold text-slate-200">{{ student.father|default:"N/A" }}</span>
+        </div>
+        <div>
+          <span class="text-slate-400 block mb-1">Mother</span>
+          <span class="font-semibold text-slate-200">{{ student.mother_name|default:"N/A" }}</span>
+        </div>
+        <div class="md:col-span-2">
+          <span class="text-slate-400 block mb-1">Parent Phone</span>
+          <span class="font-semibold text-slate-200">{{ student.parent_phone|default:"N/A" }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Enrolled Courses -->
+  <div class="bg-slate-800/80 backdrop-blur-md border border-slate-700/50 rounded-3xl p-8 shadow-xl">
+    <div class="flex items-center justify-between mb-8">
+      <h2 class="text-2xl font-bold text-slate-100 flex items-center">
+        <i class="ri-book-line text-blue-400 mr-3"></i>Enrolled Courses ({{ student.courses.all|length }})
+      </h2>
+      {% if student.courses.all|length == 0 %}
+      <span class="px-4 py-2 bg-slate-700/50 text-slate-400 rounded-xl text-sm font-medium">No courses assigned</span>
+      {% endif %}
+    </div>
+    
+    {% if student.courses.all %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% for course in student.courses.all %}
+      <div class="group bg-slate-700/50 backdrop-blur-md border border-slate-600/50 rounded-2xl p-6 hover:bg-slate-700/70 hover:shadow-xl transition-all overflow-hidden">
+        {% if course.image %}
+        <img src="{{ course.image.url }}" alt="{{ course.name }}" class="w-full h-32 object-cover rounded-xl mb-4 group-hover:scale-105 transition-transform duration-300">
+        {% endif %}
+        <h3 class="font-bold text-slate-100 text-xl mb-2 line-clamp-2">{{ course.name }}</h3>
+        <p class="text-slate-400 text-sm mb-3 line-clamp-2">{{ course.description }}</p>
+        <div class="flex items-center justify-between text-sm">
+          <span class="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full font-medium">{{ course.duration }} months</span>
+          <span class="font-bold text-emerald-400">₹{{ course.fees }}</span>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-16">
+      <i class="ri-book-line text-6xl text-slate-600 mb-4"></i>
+      <p class="text-xl text-slate-400 mb-2">No courses enrolled</p>
+      <p class="text-slate-500">Assign courses to this student</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

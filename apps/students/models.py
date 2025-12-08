@@ -36,7 +36,7 @@ class Student(models.Model):
     def save(self, *args, **kwargs):
        
         if self.teacher:
-        # Get the class linked to this teacher (reverse from Classes.class_teacher)
+      
             teacher_class = Classes.objects.filter(class_teacher=self.teacher).first()
             if teacher_class:
                 self.class_id = teacher_class.class_id

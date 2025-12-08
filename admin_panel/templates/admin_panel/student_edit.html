@@ -1,0 +1,166 @@
+{% extends "admin_panel/layout.html" %}
+
+{% block title %}Edit {{ student.name }} - Admin{% endblock %}
+{% block page_title %}Edit Student{% endblock %}
+
+{% block content %}
+<div class="space-y-8 max-w-4xl mx-auto">
+  <!-- Header -->
+  <div class="bg-slate-800/80 backdrop-blur-md border border-slate-700/50 rounded-3xl p-8 shadow-xl">
+    <div class="flex items-center justify-between">
+      <div>
+        <h1 class="text-3xl font-bold text-slate-100">Edit Student</h1>
+        <p class="text-slate-400 mt-2">Update {{ student.name }}'s information</p>
+      </div>
+      <div class="flex space-x-3">
+        <a href="{% url 'admin_panel:students' %}" class="px-6 py-2.5 bg-slate-700/50 hover:bg-slate-600/50 text-slate-200 font-medium rounded-xl transition-all">
+          <i class="ri-arrow-left-line mr-2"></i>Back to Students
+        </a>
+        <a href="{% url 'admin_panel:student_view' student.roll_number %}" class="px-6 py-2.5 bg-blue-500/80 hover:bg-blue-600/80 text-white font-medium rounded-xl transition-all">
+          <i class="ri-eye-line mr-2"></i>View Student
+        </a>
+        <button type="submit" form="studentForm" class="px-8 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all">
+          <i class="ri-save-line mr-2"></i>Update Student
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Student Preview Card -->
+  <div class="bg-slate-800/80 backdrop-blur-md border border-slate-700/50 rounded-3xl p-6 shadow-xl">
+    <div class="flex items-center space-x-6">
+      {% if student.photo %}
+      <img src="{{ student.photo.url }}" alt="{{ student.name }}" class="w-24 h-24 rounded-3xl object-cover shadow-2xl border-4 border-slate-600/50">
+      {% else %}
+      <div class="w-24 h-24 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-3xl flex items-center justify-center shadow-2xl text-white text-2xl font-bold">
+        {{ student.name|first }}
+      </div>
+      {% endif %}
+      
+      <div>
+        <h2 class="text-2xl font-bold text-slate-100">{{ student.name }}</h2>
+        <p class="text-lg text-slate-400 mt-1">Roll: <span class="font-semibold text-slate-200">{{ student.roll_number }}</span></p>
+        <div class="flex items-center space-x-4 mt-2">
+          <span class="px-3 py-1 bg-emerald-500/20 text-emerald-400 text-sm rounded-full font-medium">Active</span>
+          <span class="text-sm text-slate-400">{{ student.courses.all|length }} Courses</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Form -->
+  <form id="studentForm" method="POST" enctype="multipart/form-data" class="bg-slate-800/80 backdrop-blur-md border border-slate-700/50 rounded-3xl p-8 shadow-xl space-y-6">
+    {% csrf_token %}
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Roll Number (Primary Key - Read Only) -->
+      <div>
+        <label class="block text-sm font-medium text-slate-300 mb-3">Roll Number</label>
+        <input type="text" name="roll_number" value="{{ student.roll_number }}" readonly 
+               class="w-full px-4 py-3 bg-slate-600/50 border border-slate-600/50 rounded-2xl text-slate-200 cursor-not-allowed">
+        <p class="text-xs text-slate-500 mt-1">Primary key - cannot be changed</p>
+      </div>
+
+      <!-- Student Name -->
+      <div>
+        <label class="block text-sm font-medium text-slate-300 mb-3">Student Name * <span class="text-red-400">*</span></label>
+        <input type="text" name="name" value="{{ student.name|default:'' }}" maxlength="50" required 
+               class="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-2xl text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-transparent transition-all">
+      </div>
+
+      <!-- Gender -->
+      <div>
+        <label class="block text-sm font-medium text-slate-300 mb-3">Gender</label>
+        <select name="gender" class="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-2xl text-slate-200 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-transparent transition-all">
+          <option value="">Select Gender</option>
+          <option value="male" {% if student.gender == 'male' %}selected{% endif %}>Male</option>
+          <option value="female" {% if student.gender == 'female' %}selected{% endif %}>Female</option>
+          <option value="other" {% if student.gender == 'other' %}selected{% endif %}>Other</option>
+        </select>
+      </div>
+
+      <!-- Email -->
+      <div>
+        <label class="block text-sm font-medium text-slate-300 mb-3">Email</label>
+        <input type="email" name="email" value="{{ student.email|default:'' }}" 
+               class="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-2xl text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-transparent transition-all">
+      </div>
+
+      <!-- Phone -->
+      <div>
+        <label class="block text-sm font-medium text-slate-300 mb-3">Phone</label>
+        <input type="tel" name="phone" value="{{ student.phone|default:'' }}" maxlength="15" 
+               class="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-2xl text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-transparent transition-all">
+      </div>
+
+      <!-- DOB -->
+      <div>
+        <label class="block text-sm font-medium text-slate-300 mb-3">Date of Birth</label>
+        <input type="date" name="dob" value="{{ student.dob|date:'Y-m-d'|default:'' }}" 
+               class="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-2xl text-slate-200 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-transparent transition-all">
+      </div>
+    </div>
+
+    <!-- Teacher & Class -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <label class="block text-sm font-medium text-slate-300 mb-3">Teacher</label>
+        <select name="teacher" class="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-2xl text-slate-200 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-transparent transition-all">
+          <option value="">Select Teacher</option>
+          {% for teacher in teachers %}
+          <option value="{{ teacher.id }}" {% if student.teacher.id == teacher.id %}selected{% endif %}>{{ teacher.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      
+      <div>
+        <label class="block text-sm font-medium text-slate-300 mb-3">Class ID</label>
+        <input type="text" name="class_id" value="{{ student.class_id|default:'' }}" maxlength="10" 
+               class="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-2xl text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-transparent transition-all">
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-slate-300 mb-3">Class Name</label>
+        <input type="text" name="class_name" value="{{ student.class_name|default:'' }}" maxlength="10" 
+               class="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-2xl text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-transparent transition-all">
+      </div>
+    </div>
+
+    <!-- Photo Update -->
+    <div>
+      <label class="block text-sm font-medium text-slate-300 mb-3">Photo</label>
+      <div class="flex items-start space-x-6">
+        <div class="flex-1">
+          <input type="file" name="photo" accept="image/*" 
+                 class="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-2xl text-slate-200 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-medium file:bg-slate-600/50 file:text-slate-200 hover:file:bg-slate-700/50">
+          <p class="text-xs text-slate-500 mt-2">Leave empty to keep current photo</p>
+        </div>
+        {% if student.photo %}
+        <div class="w-24 h-24 rounded-2xl overflow-hidden shadow-lg flex-shrink-0">
+          <img src="{{ student.photo.url }}" alt="{{ student.name }}" class="w-full h-full object-cover">
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Parents Info -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div>
+        <label class="block text-sm font-medium text-slate-300 mb-3">Father's Name</label>
+        <input type="text" name="father" value="{{ student.father|default:'' }}" maxlength="30" 
+               class="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-2xl text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-transparent transition-all">
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-slate-300 mb-3">Mother's Name</label>
+        <input type="text" name="mother_name" value="{{ student.mother_name|default:'' }}" maxlength="30" 
+               class="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-2xl text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-transparent transition-all">
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-slate-300 mb-3">Parent Phone</label>
+        <input type="tel" name="parent_phone" value="{{ student.parent_phone|default:'' }}" maxlength="15" 
+               class="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-2xl text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-transparent transition-all">
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}

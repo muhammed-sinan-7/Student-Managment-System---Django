@@ -1,0 +1,65 @@
+{% extends "admin_panel/layout.html" %}
+
+{% block title %}Edit {{ teacher.name }} - Admin{% endblock %}
+{% block page_title %}Edit Teacher{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto space-y-8">
+  <!-- Header -->
+  <div class="bg-slate-800/80 backdrop-blur-md border border-slate-700/50 rounded-3xl p-8 shadow-xl">
+    <div class="flex items-center justify-between">
+      <div>
+        <h1 class="text-3xl font-bold text-slate-100">Edit Teacher</h1>
+        <p class="text-slate-400 mt-2">Update {{ teacher.name }} (ID: {{ teacher.teacher_id }})</p>
+      </div>
+      <div class="flex space-x-3">
+        <a href="{% url 'admin_panel:teachers' %}" class="px-6 py-2.5 bg-slate-700/50 hover:bg-slate-600/50 text-slate-200 font-medium rounded-xl transition-all">
+          <i class="ri-arrow-left-line mr-2"></i>Back to Teachers
+        </a>
+        <button type="submit" form="teacherForm" class="px-8 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all">
+          <i class="ri-save-line mr-2"></i>Update Teacher
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form -->
+  <form id="teacherForm" method="POST" class="bg-slate-800/80 backdrop-blur-md border border-slate-700/50 rounded-3xl p-8 shadow-xl space-y-6">
+    {% csrf_token %}
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Teacher ID (Read Only - Primary like field) -->
+      <div>
+        <label class="block text-sm font-medium text-slate-300 mb-3">Teacher ID</label>
+        <input type="text" name="teacher_id" value="{{ teacher.teacher_id|default:'' }}" readonly 
+               class="w-full px-4 py-3 bg-slate-600/50 border border-slate-600/50 rounded-2xl text-slate-200 cursor-not-allowed">
+        <p class="text-xs text-slate-500 mt-1">ID cannot be changed</p>
+      </div>
+
+      <!-- Teacher Name -->
+      <div>
+        <label class="block text-sm font-medium text-slate-300 mb-3">Teacher Name * <span class="text-red-400">*</span></label>
+        <input type="text" name="name" value="{{ teacher.name|default:'' }}" maxlength="30" required 
+               class="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-2xl text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-transparent transition-all">
+      </div>
+
+      <!-- Email -->
+      <div class="md:col-span-2">
+        <label class="block text-sm font-medium text-slate-300 mb-3">Email</label>
+        <input type="email" name="email" value="{{ teacher.email|default:'' }}" maxlength="50" 
+               class="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-2xl text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-transparent transition-all" 
+               placeholder="teacher@example.com">
+      </div>
+    </div>
+
+    <div class="flex space-x-3 pt-6">
+      <a href="{% url 'admin_panel:teachers' %}" class="px-8 py-2.5 bg-slate-700/50 hover:bg-slate-600/50 text-slate-200 font-medium rounded-xl shadow-lg transition-all flex-1 text-center">
+        Cancel
+      </a>
+      <button type="submit" class="px-8 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all flex-1">
+        Update Teacher
+      </button>
+    </div>
+  </form>
+</div>
+{% endblock %}

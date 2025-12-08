@@ -27,23 +27,26 @@ SECRET_KEY = os.getenv('SECRET_KEY','dev-secret')
 DEBUG = os.getenv("DEBUG", "False") == "True"
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")
 
+LOGIN_URL = "login"                
+LOGIN_REDIRECT_URL = "student_dashboard"  
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'apps.accounts',      # Not just 'accounts'
+    'widget_tweaks',
+    'apps.accounts',     
     'apps.classes',
-    'apps.fees',
     'apps.students',
     'apps.teachers',
-    'widget_tweaks',
+    'admin_panel'
 ]
 
 AUTH_USER_MODEL = 'accounts.CustomUser'

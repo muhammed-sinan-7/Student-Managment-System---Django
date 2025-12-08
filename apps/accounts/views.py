@@ -10,19 +10,21 @@ import uuid
 def home_redirect(request):
     user = request.user
 
-    # If not authenticated at all → go to register
+    
     if not user.is_authenticated:
         return redirect('accounts:register')
 
-    # Ignore superuser and any non-student/teacher user → treat as not logged in
+    
     if user.is_superuser or user.user_type not in ('student', 'teacher'):
         return redirect('accounts:register')
 
-    # If logged in as student → go to student dashboard
+    if user.user_type == 'admin':
+        return redirect('/admin_panel/')
+    
+    
     if user.user_type == 'student':
         return redirect('students:dashboard')
-
-    # If logged in as teacher → go to teacher dashboard
+    
     if user.user_type == 'teacher':
         return redirect('teachers:profile')
 
@@ -38,17 +40,17 @@ def RegView(request):
             roll_number = form.cleaned_data.get("roll_number")
             teacher_id = form.cleaned_data.get("teacher_id")
 
-            # Auto-generate unique username, e.g. using UUID or email prefix
+            
             def generate_username():
-                # Example: use email before @ plus uuid suffix to ensure uniqueness
+                
                 prefix = email.split('@')[0]
                 return prefix + '_' + uuid.uuid4().hex[:8]
 
-            # Create user but don't commit yet
+            
             user = form.save(commit=False)
             if not user.username:
                 user.username = generate_username()
-            # You may want to check username uniqueness here or rely on uuid uniqueness
+            
             user.save()
 
             if user_type == "student":
@@ -95,28 +97,33 @@ def RegView(request):
 
 def LoginView(request):
     if request.user.is_authenticated:
-        if hasattr(request.user, 'student'):
+        if request.user.user_type == 'student':
             return redirect("students:dashboard")
-        elif hasattr(request.user, 'teacher'):
+        elif request.user.user_type == 'teacher':
             return redirect("teachers:profile")
-        return redirect("home")  # Fallback
+        elif request.user.user_type == 'admin':
+            return redirect("/admin_panel/")
+        return redirect("home")
     
     if request.method == "POST":
         form = LoginForm(request.POST)
         if form.is_valid():
             email = form.cleaned_data["email"]
             password = form.cleaned_data["password"]
-            user = authenticate(request, username=email, password=password)
+            user = authenticate(request, username=email, password=password)  
             if user:
                 login(request, user)
-                if user.user_type=='student':
-                    
+                
+                if user.user_type == 'admin':
+                    return redirect("/admin_panel/")  
+                elif user.user_type == 'student':
                     return redirect("students:dashboard")
-                if user.user_type=='teacher':
+                elif user.user_type == 'teacher':
                     return redirect("teachers:profile")
     else:
         form = LoginForm()
     return render(request, "accounts/login.html", {"form": form})
+
 
 def Logout(request):
     logout(request)               

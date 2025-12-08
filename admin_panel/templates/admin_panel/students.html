@@ -1,0 +1,110 @@
+{% extends "admin_panel/layout.html" %}
+{% block title %}Students - Admin{% endblock %}
+{% block page_title %}Students Management{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+  <!-- FIXED Header with Search -->
+  <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between bg-slate-800/80 backdrop-blur-md border border-slate-700/50 rounded-2xl p-6">
+    <div>
+      {% if query %}
+        <h2 class="text-2xl font-semibold text-slate-100">Search Results</h2>
+        <p class="text-slate-400">{{ count }} students found for "{{ query }}"</p>
+      {% else %}
+        <h2 class="text-2xl font-semibold text-slate-100">All Students</h2>
+        <p class="text-slate-400">{{ count }} total students</p>
+      {% endif %}
+    </div>
+    
+    <!-- FIXED FORM - Matches URL name='students' -->
+    <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto items-end sm:items-center">
+      <form method="GET" action="{% url 'admin_panel:students' %}" class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+        <input
+          type="text"
+          name="q"
+          value="{{ query|default:'' }}"
+          placeholder="Search students..."
+          class="flex-1 sm:w-64 px-4 py-2.5 bg-slate-700/50 border border-slate-600/50 rounded-xl text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-transparent transition-all"
+        />
+        {% if query %}
+        <a href="{% url 'admin_panel:students' %}" class="px-4 py-2.5 bg-slate-600/50 hover:bg-slate-700 text-slate-200 rounded-xl text-sm transition-all whitespace-nowrap">
+          Clear
+        </a>
+        {% endif %}
+        <button type="submit" class="p-3 bg-purple-600/50 hover:bg-purple-700 text-slate-200 rounded-xl transition-all">
+          <i class="ri-search-line"></i>
+        </button>
+      </form>
+      
+      <a href="{% url 'admin_panel:student_add' %}" class="px-6 py-2.5 bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white font-medium rounded-xl shadow-lg hover:shadow-xl transition-all whitespace-nowrap">
+        Add Student
+      </a>
+    </div>
+  </div>
+
+  <!-- Students List (UNCHANGED - works perfectly) -->
+  <div class="bg-slate-800/80 backdrop-blur-md border border-slate-700/50 rounded-3xl p-2 shadow-xl">
+    <div class="overflow-x-auto">
+      <div class="divide-y divide-slate-700/50">
+        {% for student in students %}
+        <div class="flex items-center justify-between py-4 px-6 hover:bg-slate-700/50 transition-colors group">
+          <div class="flex items-center space-x-4 flex-1 min-w-0">
+            {% if student.photo %}
+            <img src="{{ student.photo.url }}" alt="{{ student.name }}" class="w-12 h-12 rounded-2xl object-cover shadow-lg border-2 border-slate-600/50"/>
+            {% else %}
+            <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
+              <i class="ri-user-line text-white text-xl"></i>
+            </div>
+            {% endif %}
+
+            <div class="min-w-0 flex-1">
+              <p class="font-semibold text-slate-200 text-lg truncate">
+                {{ student.first_name }} {{ student.last_name }}
+              </p>
+              <p class="text-sm text-slate-400 truncate">
+                {{ student.name }} - Roll: {{ student.roll_number }}
+              </p>
+              <div class="flex items-center space-x-4 mt-1">
+                <span class="text-xs text-slate-500">{{ student.courses.all|length }} Courses</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center space-x-2 ml-4">
+            <a href="{% url 'admin_panel:student_view' student.roll_number %}" class="p-2.5 text-slate-400 hover:text-blue-400 hover:bg-blue-500/20 rounded-xl transition-all group-hover:scale-105" title="View">
+              <i class="ri-eye-line text-lg"></i>
+            </a>
+            <a href="{% url 'admin_panel:student_edit' student.roll_number %}" class="p-2.5 text-slate-400 hover:text-purple-400 hover:bg-purple-500/20 rounded-xl transition-all group-hover:scale-105" title="Edit">
+              <i class="ri-edit-2-line text-lg"></i>
+            </a>
+            <form method="POST" action="{% url 'admin_panel:student_delete' student.roll_number %}" style="display: inline" onsubmit="return confirm('Delete {{ student.name }} permanently?')">
+              {% csrf_token %}
+              <button type="submit" class="p-2.5 text-slate-400 hover:text-red-400 hover:bg-red-500/20 rounded-xl transition-all group-hover:scale-105" title="Delete">
+                <i class="ri-delete-bin-line text-lg"></i>
+              </button>
+            </form>
+          </div>
+        </div>
+        {% empty %}
+        <div class="py-12 text-center">
+          <i class="ri-user-line text-6xl text-slate-600 mb-4"></i>
+          <p class="text-xl text-slate-400 font-medium mb-2">
+            {% if query %}No students found for "{{ query }}"{% else %}No students found{% endif %}
+          </p>
+          <p class="text-slate-500">{% if query %}Try different keywords{% else %}Get started by adding your first student{% endif %}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <div class="flex items-center justify-between pt-6 border-t border-slate-700/50">
+    <span class="text-sm text-slate-400">Showing {{ count }} students</span>
+    <div class="flex items-center space-x-2">
+      <button class="p-2 text-slate-400 hover:text-slate-200 rounded-xl hover:bg-slate-700/50">Previous</button>
+      <button class="px-4 py-2 bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-medium rounded-xl shadow-lg hover:shadow-xl">Next</button>
+    </div>
+  </div>
+</div>
+{% endblock %}

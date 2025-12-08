@@ -28,14 +28,12 @@
             {% endif %}
             <div class="course-body-small">
               <h4>{{ course.name }}</h4>
-              {% if course.course_id %}
-                <div class="course-code-small">{{ course.course_id }}</div>
-              {% endif %}
+            
               <p class="course-desc-small">{{ course.description|truncatewords:15|default:"No description available." }}</p>
               <div class="course-meta">
                 <small class="text-muted">
                   <i class="bi bi-clock me-1"></i>
-                  {{ course.duration|default:"N/A" }} {{ course.duration|default:""|add:" weeks"|default:"" }}
+                  {{ course.duration|default:"N/A" }} {{ course.duration|default:""|add:" weeks"|default:"" }} Months
                 </small>
               </div>
             </div>

@@ -1,0 +1,83 @@
+{% extends "admin_panel/layout.html" %}
+
+{% block title %}{{ teacher.name }} - Teacher Profile{% endblock %}
+{% block page_title %}{{ teacher.name }}{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto space-y-8">
+  <!-- Main Header -->
+  <div class="bg-slate-800/80 backdrop-blur-md border border-slate-700/50 rounded-3xl p-8 shadow-xl">
+    <div class="flex flex-col lg:flex-row items-start lg:items-center gap-8">
+      <!-- Profile Photo & ID -->
+      <div class="flex items-start space-x-6 flex-1 min-w-0">
+        <div class="flex-shrink-0">
+          {% if teacher.photo %}
+          <img src="{{ teacher.photo.url }}" alt="{{ teacher.name }}" 
+               class="w-32 h-32 rounded-3xl object-cover shadow-2xl border-4 border-green-400/50">
+          {% else %}
+          <div class="w-32 h-32 bg-gradient-to-br from-green-500 to-emerald-600 rounded-3xl flex items-center justify-center shadow-2xl border-4 border-green-400/50">
+            <i class="ri-user-2-fill text-4xl text-white"></i>
+          </div>
+          {% endif %}
+        </div>
+        
+        <!-- Teacher Info -->
+        <div class="min-w-0 flex-1">
+          <h1 class="text-4xl lg:text-5xl font-black bg-gradient-to-r from-slate-100 to-slate-200 bg-clip-text text-transparent leading-tight mb-2">
+            {{ teacher.name }}
+          </h1>
+          <div class="flex items-center space-x-4 mb-4">
+            <span class="px-4 py-2 bg-gradient-to-r from-green-500/20 to-emerald-500/20 text-green-300 rounded-2xl font-bold text-lg border-2 border-green-500/40 shadow-lg">
+              Active Teacher
+            </span>
+            <span class="text-2xl font-mono bg-slate-700/50 px-4 py-2 rounded-xl text-slate-300 font-bold">
+              ID: {{ teacher.teacher_id|default:teacher.id }}
+            </span>
+          </div>
+          
+          <!-- Contact Quick View -->
+          <div class="flex flex-wrap items-center gap-4 text-sm">
+            {% if teacher.email %}
+            <div class="flex items-center space-x-2 px-3 py-2 bg-slate-700/50 rounded-xl">
+              <i class="ri-mail-line text-slate-400"></i>
+              <span class="font-medium text-slate-200 truncate max-w-xs">{{ teacher.email }}</span>
+            </div>
+            {% endif %}
+            {% if teacher.phone %}
+            <div class="flex items-center space-x-2 px-3 py-2 bg-slate-700/50 rounded-xl">
+              <i class="ri-phone-line text-slate-400"></i>
+              <span class="font-medium text-slate-200">{{ teacher.phone }}</span>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      
+      <!-- Actions -->
+      <div class="flex flex-col sm:flex-row gap-3 min-w-[200px]">
+        <a href="{% url 'admin_panel:teacher_edit' teacher.id %}" 
+           class="px-8 py-3 bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center">
+          <i class="ri-edit-box-line mr-2"></i>Edit Profile
+        </a>
+        <a href="{% url 'admin_panel:teachers' %}" 
+           class="px-8 py-3 bg-gradient-to-r from-slate-600 to-slate-700 hover:from-slate-700 hover:to-slate-800 text-slate-200 font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center">
+          <i class="ri-arrow-left-line mr-2"></i>Back to Teachers
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats & Assigned Students -->
+  <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+    <!-- Stats Cards -->
+    <div class="xl:col-span-1">
+      <div class="bg-slate-800/80 backdrop-blur-md border border-slate-700/50 rounded-3xl p-8 shadow-xl space-y-6">
+        <h2 class="text-2xl font-bold text-slate-100 flex items-center">
+          <i class="ri-bar-chart-box-line text-green-400 mr-3"></i>Statistics
+        </h2>
+        <div class="space-y-6">
+          <div class="text-center p-6 bg-slate-700/50 rounded-2xl border border-slate-600/50">
+            <div class="text-4xl font-black text-emerald-400 mb-2">{{ teacher.students.count }}</div>
+            <div class="text-slate-400 uppercase tracking-wide text-sm font-medium">Total Students</div>
+          </div>
+          <div class="text-center p-6 bg-slate-700/50

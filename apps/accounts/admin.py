@@ -11,7 +11,7 @@ from apps.teachers.models import Notification
 class CustomUserAdmin(UserAdmin):
     model = CustomUser
     list_display = ['username', 'email', 'user_type', 'is_staff']
-    # Add your custom fields to fieldsets
+   
     fieldsets = UserAdmin.fieldsets + (
         ('Additional Info', {'fields': ('phone', 'user_type')}),
     )

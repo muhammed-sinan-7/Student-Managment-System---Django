@@ -1,0 +1,97 @@
+{% extends "admin_panel/layout.html" %}
+
+{% block title %}Teachers - Admin{% endblock %}
+{% block page_title %}Teachers Management{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+  <!-- Header -->
+  <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between bg-slate-800/80 backdrop-blur-md border border-slate-700/50 rounded-2xl p-6">
+    <div>
+      <h2 class="text-2xl font-semibold text-slate-100">All Teachers</h2>
+      <p class="text-slate-400">{{ teachers|length }} total teachers</p>
+    </div>
+    <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+      <input type="text" placeholder="Search teachers..." class="flex-1 sm:w-64 px-4 py-2.5 bg-slate-700/50 border border-slate-600/50 rounded-xl text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500/50 focus:border-transparent transition-all">
+      <a href="{% url 'admin_panel:teacher_add' %}" class="px-6 py-2.5 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-medium rounded-xl shadow-lg hover:shadow-xl transition-all whitespace-nowrap">
+        <i class="ri-add-line mr-1"></i>Add Teacher
+      </a>
+    </div>
+  </div>
+
+
+  <div class="bg-slate-800/80 backdrop-blur-md border border-slate-700/50 rounded-3xl p-2 shadow-xl">
+    <div class="overflow-x-auto">
+      <div class="divide-y divide-slate-700/50">
+        {% for teacher in teachers %}
+        <div class="flex items-center justify-between py-4 px-6 hover:bg-slate-700/50 transition-colors group">
+          
+          <div class="flex items-center space-x-4 flex-1 min-w-0">
+            
+            {% if teacher.photo %}
+            <img src="{{ teacher.photo.url }}" alt="{{ teacher.name }}" 
+                 class="w-14 h-14 rounded-2xl object-cover shadow-lg border-2 border-emerald-500/30">
+            {% else %}
+            <div class="w-14 h-14 bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center shadow-lg">
+              <i class="ri-user-2-line text-white text-xl"></i>
+            </div>
+            {% endif %}
+            
+            
+            <div class="min-w-0 flex-1">
+              <p class="font-semibold text-slate-200 text-lg truncate">
+                {{ teacher.name }}
+              </p>
+              <p class="text-sm text-slate-400 truncate mb-1">
+                ID: {{ teacher.teacher_id }}
+              </p>
+              <div class="flex items-center space-x-4 text-xs">
+            
+                <span class="text-slate-500">
+                  {{ teacher.students.count }} Students
+                </span>
+              </div>
+            </div>
+          </div>
+
+         
+          <div class="hidden md:flex items-center space-x-4 mx-8 text-sm text-slate-400 min-w-[200px]">
+            <div class="text-center">
+              <div class="text-slate-200 font-semibold">{{ teacher.phone|default:"N/A" }}</div>
+              <div class="text-xs">Phone</div>
+            </div>
+            <div class="text-center">
+              <div class="text-slate-200 font-semibold truncate max-w-[120px]">{{ teacher.email|default:"N/A"|slice:":20" }}</div>
+              <div class="text-xs">Email</div>
+            </div>
+          </div>
+
+          
+          <div class="flex items-center space-x-2">
+            <a href="{% url 'admin_panel:teacher_view' teacher.teacher_id %}" class="p-2.5 text-slate-400 hover:text-blue-400 hover:bg-blue-500/20 rounded-xl transition-all group-hover:scale-105" title="View Profile">
+              <i class="ri-eye-line text-lg"></i>
+            </a>
+            <a href="{% url 'admin_panel:teacher_edit' teacher.teacher_id %}" class="p-2.5 text-slate-400 hover:text-purple-400 hover:bg-purple-500/20 rounded-xl transition-all group-hover:scale-105" title="Edit Teacher">
+              <i class="ri-edit-2-line text-lg"></i>
+            </a>
+            <a href="{% url 'admin_panel:teacher_delete' teacher.teacher_id %}" class="p-2.5 text-slate-400 hover:text-purple-400 hover:bg-purple-500/20 rounded-xl transition-all group-hover:scale-105" title="Edit Teacher">
+              <i class="ri-delete-bin-line text-lg"></i>
+            </a>
+    
+          </div>
+        </div>
+        {% empty %}
+        <div class="py-12 text-center">
+          <i class="ri-user-2-line text-6xl text-slate-600 mb-4"></i>
+          <p class="text-xl text-slate-400 font-medium mb-2">No teachers found</p>
+          <p class="text-slate-500">Get started by adding your first teacher</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+ 
+  
+</div>
+{% endblock content %}

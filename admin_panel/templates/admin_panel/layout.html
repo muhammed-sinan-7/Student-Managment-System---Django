@@ -1,0 +1,28 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin - Academex{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 text-gray-900 antialiased">
+    <!-- Topbar -->
+    {% include "admin_panel/partials/topbar.html" %}
+    
+    <div class="flex h-screen overflow-hidden">
+        <!-- Fixed Sidebar -->
+        {% include "admin_panel/partials/sidebar.html" %}
+        
+        <!-- Main Content -->
+        <div class="flex-1 ml-0 lg:ml-64 transition-all duration-300">
+            <main class="p-6 h-full overflow-y-auto">
+                {% block content %}{% endblock %}
+            </main>
+        </div>
+    </div>
+</body>
+</html>

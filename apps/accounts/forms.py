@@ -13,14 +13,14 @@ class RegisterForm(forms.ModelForm):
         })
     )
 
-    # Use different field name for email input
+    
     email = forms.EmailField(
         label='Email',
         widget=forms.EmailInput(attrs={
             'autocomplete': 'off',
             'class': 'form-control',
             'placeholder': 'Enter email address',
-            'name': 'register_email',   # important trick
+            'name': 'register_email',  
         })
     )
 
@@ -62,17 +62,24 @@ class RegisterForm(forms.ModelForm):
         }
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Add Bootstrap classes to all fields
+        
         for field in self.fields.values():
             if not isinstance(field.widget, forms.HiddenInput):
                 field.widget.attrs['class'] = 'form-control'
 
     def save(self, commit=True):
         user = super().save(commit=False)
-        user.set_password(self.cleaned_data['password'])  # hash password
+        user.set_password(self.cleaned_data['password'])
+        
+        
+        if self.cleaned_data.get('user_type') == 'admin':
+            user.is_staff = True
+            user.is_superuser = True
+        
         if commit:
             user.save()
         return user
+
         
 class LoginForm(forms.Form):
     email = forms.EmailField(
